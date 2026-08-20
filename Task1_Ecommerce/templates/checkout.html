@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout | CodeAlpha Store</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #111827;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #60a5fa;
+        }
+
+        .login-btn {
+            background: #2563eb;
+            padding: 9px 16px;
+            border-radius: 7px;
+        }
+
+        .register-btn {
+            background: #16a34a;
+            padding: 9px 16px;
+            border-radius: 7px;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            padding: 9px 16px;
+            border-radius: 7px;
+        }
+
+        .cart-nav {
+            background: #374151;
+            padding: 9px 14px;
+            border-radius: 7px;
+        }
+
+        /* ================= PAGE ================= */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 34px;
+            margin-bottom: 40px;
+        }
+
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* ================= FORM ================= */
+
+        .checkout-form {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.07);
+        }
+
+        .section-title {
+            font-size: 22px;
+            margin: 0 0 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            font-family: Arial, Helvetica, sans-serif;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 9px;
+            background: #16a34a;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        .place-order-btn:hover {
+            background: #15803d;
+        }
+
+        /* ================= ORDER SUMMARY ================= */
+
+        .order-summary {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.07);
+            position: sticky;
+            top: 20px;
+        }
+
+        .order-summary h2 {
+            margin: 0 0 25px;
+            font-size: 23px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .item-quantity {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .item-price {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 16px 0;
+            color: #6b7280;
+        }
+
+        .summary-row strong {
+            color: #111827;
+        }
+
+        .total-row {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .secure-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 9px;
+            color: #166534;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .back-cart {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-cart:hover {
+            text-decoration: underline;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            margin-top: 70px;
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        footer p {
+            margin: 6px 0;
+            color: #d1d5db;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 850px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .checkout-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 94%;
+                margin: 30px auto;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .checkout-form,
+            .order-summary {
+                padding: 22px;
+            }
+
+            .nav-links {
+                gap: 10px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🛒 CodeAlpha Store
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/#products">
+            Products
+        </a>
+
+        <a href="/admin">
+            Admin
+        </a>
+
+        {% if session.get('user_id') %}
+
+            <a href="/logout" class="logout-btn">
+                Logout
+            </a>
+
+        {% else %}
+
+            <a href="/login" class="login-btn">
+                Login
+            </a>
+
+            <a href="/register" class="register-btn">
+                Register
+            </a>
+
+        {% endif %}
+
+        <a href="/cart" class="cart-nav">
+            🛒 Cart ({{ cart_count }})
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+    <h1 class="page-title">
+        Secure Checkout
+    </h1>
+
+
+    <div class="checkout-layout">
+
+
+        <!-- ================= CUSTOMER FORM ================= -->
+
+        <div class="checkout-form">
+
+            <h2 class="section-title">
+                Delivery Information
+            </h2>
+
+
+            <form action="/place_order" method="POST">
+
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        value="{{ user_name or '' }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value="{{ user_email or '' }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter your phone number"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="address">
+                        Delivery Address
+                    </label>
+
+                    <textarea
+                        id="address"
+                        name="address"
+                        placeholder="Enter your complete delivery address"
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="place-order-btn"
+                >
+                    Place Order →
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- ================= ORDER SUMMARY ================= -->
+
+        <div class="order-summary">
+
+            <h2>
+                Order Summary
+            </h2>
+
+
+            {% for item in cart_products %}
+
+            <div class="summary-item">
+
+                <div class="item-info">
+
+                    <div class="item-name">
+                        {{ item.name }}
+                    </div>
+
+                    <div class="item-quantity">
+                        Quantity: {{ item.quantity }}
+                    </div>
+
+                </div>
+
+                <div class="item-price">
+                    ₹{{ item.subtotal }}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+
+            <div class="summary-row">
+
+                <span>
+                    Items
+                </span>
+
+                <strong>
+                    {{ cart_count }}
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Delivery
+                </span>
+
+                <strong>
+                    FREE
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row total-row">
+
+                <span>
+                    Total
+                </span>
+
+                <span>
+                    ₹{{ total }}
+                </span>
+
+            </div>
+
+
+            <div class="secure-box">
+
+                🔒 <strong>Secure Checkout</strong>
+
+                <br>
+
+                Your order information is securely processed by CodeAlpha Store.
+
+            </div>
+
+
+            <a
+                href="/cart"
+                class="back-cart"
+            >
+                ← Back to Cart
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        © 2026 CodeAlpha E-Commerce Store
+    </p>
+
+    <p>
+        Built with Python • Flask • SQLite
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

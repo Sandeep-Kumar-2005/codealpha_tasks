@@ -1,0 +1,610 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CodeAlpha Store</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #60a5fa;
+        }
+
+        .login-btn {
+            background: #2563eb;
+            padding: 9px 17px;
+            border-radius: 7px;
+        }
+
+        .register-btn {
+            background: #16a34a;
+            padding: 9px 17px;
+            border-radius: 7px;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            padding: 9px 17px;
+            border-radius: 7px;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            text-align: center;
+            padding: 75px 20px;
+            background: white;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .hero-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 28px;
+            border-radius: 7px;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-section {
+            padding: 35px 7% 10px;
+        }
+
+        .search-box {
+            max-width: 1000px;
+            margin: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 16px;
+        }
+
+        .search-box select {
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            background: white;
+        }
+
+        .search-button {
+            padding: 15px 25px;
+            background: #111827;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .clear-search {
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            text-decoration: none;
+            color: #dc2626;
+        }
+
+        /* ================= PRODUCTS ================= */
+
+        .products-section {
+            width: 90%;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .products-section > h2 {
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 30px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #f3f4f6;
+        }
+
+        .product-card h3 {
+            font-size: 21px;
+            margin: 15px 0 8px;
+        }
+
+        .product-card h3 a {
+            color: #111827;
+        }
+
+        .category {
+            display: inline-block;
+            background: #e5e7eb;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 13px;
+        }
+
+        .product-card h4 {
+            font-size: 22px;
+            margin: 15px 0;
+        }
+
+        .product-card p {
+            color: #666;
+            line-height: 1.5;
+            min-height: 45px;
+        }
+
+        .cart-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 7px;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .cart-button:hover {
+            background: #374151;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #111827;
+            color: white;
+            margin-top: 60px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .navbar {
+                flex-direction: column;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-box input,
+            .search-box select,
+            .search-button {
+                width: 100%;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                justify-content: center;
+                gap: 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🛒 CodeAlpha Store
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="#products">
+            Products
+        </a>
+
+
+        <!-- USER ACCESS ONLY -->
+
+        {% if session.get('user_id') %}
+
+            <a href="/orders">
+                My Orders
+            </a>
+
+            <a href="/logout"
+               class="logout-btn">
+                Logout
+            </a>
+
+        {% else %}
+
+            <a href="/login"
+               class="login-btn">
+                Login
+            </a>
+
+            <a href="/register"
+               class="register-btn">
+                Register
+            </a>
+
+        {% endif %}
+
+
+        <a href="/cart">
+            🛒 Cart ({{ cart_count }})
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <h1>
+        Welcome to CodeAlpha E-Commerce Store
+    </h1>
+
+    <p>
+        Find the best products at the best prices.
+    </p>
+
+    <a href="#products"
+       class="hero-button">
+        Shop Now
+    </a>
+
+</section>
+
+
+<!-- ================= SEARCH ================= -->
+
+<section class="search-section">
+
+    <form
+        action="/"
+        method="GET"
+        class="search-box"
+    >
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Search products..."
+            value="{{ search|default('') }}"
+        >
+
+
+        <select name="category">
+
+            <option value="">
+                All Categories
+            </option>
+
+
+            {% for category in categories %}
+
+            <option
+                value="{{ category.category }}"
+                {% if selected_category|default('') == category.category %}
+                    selected
+                {% endif %}
+            >
+
+                {{ category.category }}
+
+            </option>
+
+            {% endfor %}
+
+        </select>
+
+
+        <button
+            type="submit"
+            class="search-button"
+        >
+            🔍 Search
+        </button>
+
+
+        {% if search|default('') or selected_category|default('') %}
+
+        <a
+            href="/"
+            class="clear-search"
+        >
+            Clear
+        </a>
+
+        {% endif %}
+
+    </form>
+
+</section>
+
+
+<!-- ================= PRODUCTS ================= -->
+
+<section
+    class="products-section"
+    id="products"
+>
+
+    <h2>
+        Our Products
+    </h2>
+
+
+    {% if products %}
+
+    <div class="product-grid">
+
+
+        {% for product in products %}
+
+        <div class="product-card">
+
+
+            <a href="/product/{{ product.id }}">
+
+                {% if product.name == "Smartphone" %}
+
+                <img
+                    src="{{ url_for('static', filename='images/smartphone.jpg') }}"
+                    class="product-image"
+                    alt="Smartphone"
+                >
+
+                {% elif product.name == "Laptop" %}
+
+                <img
+                    src="{{ url_for('static', filename='images/laptop.jpg') }}"
+                    class="product-image"
+                    alt="Laptop"
+                >
+
+                {% elif product.name == "Headphones" %}
+
+                <img
+                    src="{{ url_for('static', filename='images/headphones.jpg') }}"
+                    class="product-image"
+                    alt="Headphones"
+                >
+
+                {% elif product.name == "Smart Watch" %}
+
+                <img
+                    src="{{ url_for('static', filename='images/smartwatch.jpg') }}"
+                    class="product-image"
+                    alt="Smart Watch"
+                >
+
+                {% elif product.name == "Keyboard" %}
+
+                <img
+                    src="{{ url_for('static', filename='images/keyboard.jpg') }}"
+                    class="product-image"
+                    alt="Keyboard"
+                >
+
+                {% elif product.name == "Wireless Mouse" %}
+
+                <img
+                    src="{{ url_for('static', filename='images/mouse.jpg') }}"
+                    class="product-image"
+                    alt="Wireless Mouse"
+                >
+
+                {% else %}
+
+                <div
+                    class="product-image"
+                    style="display:flex;align-items:center;justify-content:center;"
+                >
+                    📦
+                </div>
+
+                {% endif %}
+
+            </a>
+
+
+            <h3>
+
+                <a
+                    href="/product/{{ product.id }}"
+                    style="text-decoration:none;"
+                >
+                    {{ product.name }}
+                </a>
+
+            </h3>
+
+
+            <span class="category">
+                {{ product.category }}
+            </span>
+
+
+            <h4>
+                ₹{{ product.price }}
+            </h4>
+
+
+            <p>
+                {{ product.description }}
+            </p>
+
+
+            <a
+                href="/add_to_cart/{{ product.id }}"
+                class="cart-button"
+            >
+                🛒 Add to Cart
+            </a>
+
+
+        </div>
+
+        {% endfor %}
+
+
+    </div>
+
+
+    {% else %}
+
+    <div class="no-results">
+
+        <h3>
+            No products found 😔
+        </h3>
+
+        <p>
+            Try another search or category.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        © 2026 CodeAlpha E-Commerce Store
+    </p>
+
+    <p>
+        Built with Python • Flask • SQLite
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

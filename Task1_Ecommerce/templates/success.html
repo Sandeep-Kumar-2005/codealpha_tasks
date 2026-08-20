@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Order Successful | CodeAlpha Store</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #111827;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #60a5fa;
+        }
+
+        .cart-link {
+            background: #2563eb;
+            padding: 9px 15px;
+            border-radius: 7px;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            padding: 9px 15px;
+            border-radius: 7px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 60px auto;
+        }
+
+        .success-card {
+            background: white;
+            border-radius: 18px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .success-icon {
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #16a34a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            font-weight: bold;
+        }
+
+        .success-card h1 {
+            margin: 0 0 12px;
+            font-size: 32px;
+            color: #111827;
+        }
+
+        .success-message {
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 35px;
+        }
+
+        .order-details {
+            text-align: left;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .order-details h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #6b7280;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .total-row {
+            margin-top: 8px;
+            padding-top: 18px;
+            border-top: 2px solid #d1d5db;
+            border-bottom: none;
+            font-size: 20px;
+        }
+
+        .total-row .detail-value {
+            color: #16a34a;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 22px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #1d4ed8;
+        }
+
+        .secondary {
+            background: #111827;
+            color: white;
+        }
+
+        .secondary:hover {
+            background: #374151;
+        }
+
+        footer {
+            margin-top: 70px;
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        footer p {
+            margin: 6px 0;
+            color: #d1d5db;
+        }
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .container {
+                width: 94%;
+                margin: 30px auto;
+            }
+
+            .success-card {
+                padding: 35px 20px;
+            }
+
+            .success-card h1 {
+                font-size: 27px;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .detail-value {
+                text-align: left;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🛒 CodeAlpha Store
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/#products">
+            Products
+        </a>
+
+        <a href="/orders">
+            My Orders
+        </a>
+
+        <a href="/cart" class="cart-link">
+            🛒 Cart
+        </a>
+
+        {% if session.get("user_id") %}
+
+        <a href="/logout" class="logout-btn">
+            Logout
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="success-card">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h1>
+            Order Placed Successfully!
+        </h1>
+
+        <p class="success-message">
+            Thank you for shopping with CodeAlpha Store.
+            Your order has been successfully placed.
+        </p>
+
+
+        <div class="order-details">
+
+            <h2>
+                Order Details
+            </h2>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Order ID
+                </span>
+
+                <span class="detail-value">
+                    {{ order.order_id }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Customer
+                </span>
+
+                <span class="detail-value">
+                    {{ order.name }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Email
+                </span>
+
+                <span class="detail-value">
+                    {{ order.email }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Phone
+                </span>
+
+                <span class="detail-value">
+                    {{ order.phone }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Delivery Address
+                </span>
+
+                <span class="detail-value">
+                    {{ order.address }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row total-row">
+
+                <span>
+                    Total Amount
+                </span>
+
+                <span class="detail-value">
+                    ₹{{ order.total }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="buttons">
+
+            <a href="/" class="btn primary">
+                🛍️ Continue Shopping
+            </a>
+
+            <a href="/orders" class="btn secondary">
+                📦 View My Orders
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    <p>
+        © 2026 CodeAlpha E-Commerce Store
+    </p>
+
+    <p>
+        Built with Python • Flask • SQLite
+    </p>
+
+</footer>
+
+</body>
+
+</html>

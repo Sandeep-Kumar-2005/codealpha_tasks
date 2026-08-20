@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Order Successful - CodeAlpha Store</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 70px auto;
+        }
+
+        .success-card {
+            background: white;
+            padding: 50px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin: 10px 0;
+        }
+
+        .message {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .order-box {
+            background: #f3f4f6;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: left;
+            margin: 25px 0;
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .buttons {
+            margin-top: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 14px 25px;
+            margin: 5px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .home-button {
+            background: #111827;
+            color: white;
+        }
+
+        .admin-button {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .success-card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .order-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            CodeAlpha Store
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/admin">
+                Admin
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- SUCCESS -->
+
+    <div class="container">
+
+        <div class="success-card">
+
+
+            <div class="success-icon">
+                ✅
+            </div>
+
+
+            <h1>
+                Order Placed Successfully!
+            </h1>
+
+
+            <p class="message">
+                Thank you for shopping with CodeAlpha Store.
+            </p>
+
+
+            <div class="order-box">
+
+
+                <div class="order-row">
+
+                    <span class="label">
+                        Order ID
+                    </span>
+
+                    <span>
+                        {{ order.order_id }}
+                    </span>
+
+                </div>
+
+
+                <div class="order-row">
+
+                    <span class="label">
+                        Customer
+                    </span>
+
+                    <span>
+                        {{ order.name }}
+                    </span>
+
+                </div>
+
+
+                <div class="order-row">
+
+                    <span class="label">
+                        Email
+                    </span>
+
+                    <span>
+                        {{ order.email }}
+                    </span>
+
+                </div>
+
+
+                <div class="order-row">
+
+                    <span class="label">
+                        Phone
+                    </span>
+
+                    <span>
+                        {{ order.phone }}
+                    </span>
+
+                </div>
+
+
+                <div class="order-row">
+
+                    <span class="label">
+                        Total Amount
+                    </span>
+
+                    <span class="total">
+                        ₹{{ order.total }}
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <p>
+                Your order has been recorded successfully.
+            </p>
+
+
+            <div class="buttons">
+
+                <a
+                    href="/"
+                    class="button home-button"
+                >
+                    🏠 Continue Shopping
+                </a>
+
+
+                <a
+                    href="/admin"
+                    class="button admin-button"
+                >
+                    📊 View Admin
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
