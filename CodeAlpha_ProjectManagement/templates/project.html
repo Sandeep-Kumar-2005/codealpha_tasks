@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project.name }} - ProjectHub</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">P</div>
+            <div>
+                <h2>ProjectHub</h2>
+                <span>Management Tool</span>
+            </div>
+        </div>
+
+        <nav>
+            <a href="{{ url_for('index') }}">
+                <span>▣</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('index') }}#projects" class="active">
+                <span>▤</span>
+                Projects
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <p>CodeAlpha</p>
+            <small>Project Management</small>
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <p class="welcome">
+                    Project Details
+                </p>
+
+                <h1>{{ project.name }}</h1>
+            </div>
+
+            <a href="{{ url_for('index') }}"
+               class="add-btn">
+                ← Dashboard
+            </a>
+
+        </header>
+
+
+        <section class="project-detail-card">
+
+            <div class="detail-header">
+
+                <div>
+                    <div class="project-symbol large">
+                        {{ project.name[0]|upper }}
+                    </div>
+                </div>
+
+                <div class="detail-info">
+
+                    <h2>{{ project.name }}</h2>
+
+                    <p>
+                        {{ project.description or
+                           "No description provided." }}
+                    </p>
+
+                    <div class="badges">
+
+                        <span class="status
+                        {% if project.status == 'Completed' %}
+                            completed
+                        {% elif project.status == 'In Progress' %}
+                            progress
+                        {% else %}
+                            planning
+                        {% endif %}">
+                            {{ project.status }}
+                        </span>
+
+                        <span class="priority
+                        {% if project.priority == 'High' %}
+                            high
+                        {% elif project.priority == 'Medium' %}
+                            medium
+                        {% else %}
+                            low
+                        {% endif %}">
+                            {{ project.priority }}
+                        </span>
+
+                    </div>
+
+                    {% if project.deadline %}
+                    <p class="deadline">
+                        Deadline: {{ project.deadline }}
+                    </p>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="tasks-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Tasks</h2>
+                    <p>Manage tasks for this project</p>
+                </div>
+
+                <span class="project-count">
+                    {{ tasks|length }} Tasks
+                </span>
+
+            </div>
+
+
+            <div class="add-task-box">
+
+                <form
+                    action="{{ url_for('add_task',
+                                      project_id=project.id) }}"
+                    method="POST">
+
+                    <input
+                        type="text"
+                        name="title"
+                        placeholder="Enter a new task..."
+                        required>
+
+                    <button type="submit"
+                            class="submit-btn">
+                        + Add Task
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <div class="task-list">
+
+                {% for task in tasks %}
+
+                <div class="task-item">
+
+                    <div class="task-left">
+
+                        {% if task.status == "Completed" %}
+
+                        <span class="task-check completed-check">
+                            ✓
+                        </span>
+
+                        <span class="task-title done">
+                            {{ task.title }}
+                        </span>
+
+                        {% else %}
+
+                        <span class="task-check">
+                            ○
+                        </span>
+
+                        <span class="task-title">
+                            {{ task.title }}
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="task-actions">
+
+                        {% if task.status != "Completed" %}
+
+                        <form
+                            action="{{ url_for(
+                                'complete_task',
+                                task_id=task.id
+                            ) }}"
+                            method="POST">
+
+                            <button class="complete-task"
+                                    type="submit">
+                                Complete
+                            </button>
+
+                        </form>
+
+                        {% else %}
+
+                        <span class="task-completed-label">
+                            Completed
+                        </span>
+
+                        {% endif %}
+
+
+                        <form
+                            action="{{ url_for(
+                                'delete_task',
+                                task_id=task.id
+                            ) }}"
+                            method="POST">
+
+                            <button class="task-delete"
+                                    type="submit"
+                                    title="Delete task">
+                                ×
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-state">
+
+                    <div>✓</div>
+
+                    <h3>No tasks yet</h3>
+
+                    <p>
+                        Add your first task to this project.
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+
+        <footer>
+            <p>
+                ProjectHub • CodeAlpha Project Management Tool
+            </p>
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>
