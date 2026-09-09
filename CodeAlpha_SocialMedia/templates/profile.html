@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Socially</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <a href="{{ url_for('home') }}" class="logo">
+            Social<span>ly</span>
+        </a>
+
+        <div class="profile-mini">
+
+            <div class="avatar">
+                {{ profile_user["username"][0]|upper }}
+            </div>
+
+            <strong>
+                {{ profile_user["username"] }}
+            </strong>
+
+            <small>
+                @{{ profile_user["username"] }}
+            </small>
+
+        </div>
+
+        <nav class="nav">
+
+            <a href="{{ url_for('home') }}">
+                <span class="nav-icon">⌂</span>
+                Home
+            </a>
+
+            <a href="{{ url_for('home') }}#feed">
+                <span class="nav-icon">⌕</span>
+                Explore
+            </a>
+
+            <a href="{{ url_for('home') }}#suggestions">
+                <span class="nav-icon">♡</span>
+                Notifications
+            </a>
+
+            <a href="{{ url_for('home') }}#comments">
+                <span class="nav-icon">✉</span>
+                Messages
+            </a>
+
+            <a href="{{ url_for('profile') }}" class="active">
+                <span class="nav-icon">●</span>
+                My Profile
+            </a>
+
+            <a href="{{ url_for('logout') }}">
+                <span class="nav-icon">↪</span>
+                Logout
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            About · Privacy · Terms<br>
+            Help<br><br>
+            © 2026 Socially
+        </div>
+
+    </aside>
+
+
+    <!-- PROFILE CONTENT -->
+    <main class="main-content">
+
+        <section class="profile-cover">
+
+            <div class="profile-large-avatar">
+                {{ profile_user["username"][0]|upper }}
+            </div>
+
+            <div class="profile-main-info">
+
+                <h1>
+                    {{ profile_user["username"] }}
+                </h1>
+
+                <p>
+                    @{{ profile_user["username"] }}
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="profile-stats">
+
+            <div>
+                <strong>{{ posts|length }}</strong>
+                <span>Posts</span>
+            </div>
+
+            <div>
+                <strong>{{ follower_count }}</strong>
+                <span>Followers</span>
+            </div>
+
+            <div>
+                <strong>{{ following_count }}</strong>
+                <span>Following</span>
+            </div>
+
+        </section>
+
+
+        <section class="profile-posts">
+
+            <div class="section-title">
+                <h2>Your Posts</h2>
+            </div>
+
+            {% if posts %}
+
+                {% for post in posts %}
+
+                <article class="post-card">
+
+                    <div class="post-header">
+
+                        <div class="post-user">
+
+                            <div class="avatar">
+                                {{ profile_user["username"][0]|upper }}
+                            </div>
+
+                            <div>
+                                <strong>
+                                    {{ profile_user["username"] }}
+                                </strong>
+
+                                <small>
+                                    @{{ profile_user["username"] }}
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <form
+                            action="{{ url_for('delete_post', post_id=post['id']) }}"
+                            method="POST"
+                        >
+                            <button
+                                type="submit"
+                                class="post-delete"
+                                title="Delete post"
+                            >
+                                ⋯
+                            </button>
+                        </form>
+
+                    </div>
+
+                    <div class="post-content">
+                        {{ post["content"] }}
+                    </div>
+
+                    <div class="post-footer">
+
+                        <span class="profile-like">
+                            ♡ {{ post["likes"] }} Likes
+                        </span>
+
+                    </div>
+
+                </article>
+
+                {% endfor %}
+
+            {% else %}
+
+                <section class="empty-state">
+
+                    <div class="empty-icon">
+                        ✨
+                    </div>
+
+                    <h2>No posts yet</h2>
+
+                    <p>
+                        Go to Home and create your first post.
+                    </p>
+
+                    <br>
+
+                    <a
+                        href="{{ url_for('home') }}"
+                        class="publish-btn profile-home-btn"
+                    >
+                        Create a Post
+                    </a>
+
+                </section>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="right-sidebar">
+
+        <section class="widget">
+
+            <div class="widget-header">
+                <h3>Profile</h3>
+            </div>
+
+            <div class="profile-widget">
+
+                <div class="avatar">
+                    {{ profile_user["username"][0]|upper }}
+                </div>
+
+                <strong>
+                    {{ profile_user["username"] }}
+                </strong>
+
+                <small>
+                    @{{ profile_user["username"] }}
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <section class="widget">
+
+            <div class="widget-header">
+                <h3>Your Network</h3>
+            </div>
+
+            <div class="network-stats">
+
+                <div class="network-stat">
+                    <strong>{{ follower_count }}</strong>
+                    <span>Followers</span>
+                </div>
+
+                <div class="network-stat">
+                    <strong>{{ following_count }}</strong>
+                    <span>Following</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </aside>
+
+</div>
+
+</body>
+</html>

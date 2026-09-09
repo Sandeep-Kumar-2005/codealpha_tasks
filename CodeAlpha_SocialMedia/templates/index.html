@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socially - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+
+        <a href="{{ url_for('home') }}" class="logo">
+            Social<span>ly</span>
+        </a>
+
+        {% if session.get("user_id") %}
+
+        <div class="profile-mini">
+            <div class="avatar">
+                {{ session.get("username", "U")[0]|upper }}
+            </div>
+
+            <strong>{{ session.get("username") }}</strong>
+            <small>@{{ session.get("username") }}</small>
+        </div>
+
+        <nav class="nav">
+
+            <a href="{{ url_for('home') }}" class="active">
+                <span class="nav-icon">⌂</span>
+                Home
+            </a>
+
+            <a href="#feed">
+                <span class="nav-icon">⌕</span>
+                Explore
+            </a>
+
+            <a href="#suggestions">
+                <span class="nav-icon">♡</span>
+                Notifications
+            </a>
+
+            <a href="#comments">
+                <span class="nav-icon">✉</span>
+                Messages
+            </a>
+
+            <a href="{{ url_for('profile') }}">
+                <span class="nav-icon">●</span>
+                My Profile
+            </a>
+
+            <a href="{{ url_for('logout') }}">
+                <span class="nav-icon">↪</span>
+                Logout
+            </a>
+
+        </nav>
+
+        {% else %}
+
+        <nav class="nav">
+
+            <a href="{{ url_for('login') }}">
+                <span class="nav-icon">→</span>
+                Login
+            </a>
+
+            <a href="{{ url_for('register') }}">
+                <span class="nav-icon">+</span>
+                Register
+            </a>
+
+        </nav>
+
+        {% endif %}
+
+        <div class="sidebar-footer">
+            About · Privacy · Terms<br>
+            Help<br><br>
+            © 2026 Socially
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="feed">
+
+        <section class="page-header">
+
+            <h1>Home Feed</h1>
+
+            <p>
+                Share your thoughts with the Socially community.
+            </p>
+
+        </section>
+
+
+        {% if session.get("user_id") %}
+
+        <!-- CREATE POST -->
+        <section class="create-post">
+
+            <form action="{{ url_for('add_post') }}" method="POST">
+
+                <div class="create-top">
+
+                    <div class="avatar">
+                        {{ session.get("username", "U")[0]|upper }}
+                    </div>
+
+                    <textarea
+                        name="content"
+                        placeholder="What's on your mind?"
+                        required
+                    ></textarea>
+
+                </div>
+
+                <div class="post-actions">
+
+                    <div class="post-options">
+                        <button type="button" class="post-option">
+                            📷 Photo
+                        </button>
+
+                        <button type="button" class="post-option">
+                            😊 Feeling
+                        </button>
+                    </div>
+
+                    <button type="submit" class="publish-btn">
+                        Post
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- POSTS -->
+        {% if posts %}
+
+            {% for post in posts %}
+
+            <article class="post-card">
+
+                <div class="post-header">
+
+                    <div class="post-user">
+
+                        <div class="avatar">
+                            {{ post["username"][0]|upper }}
+                        </div>
+
+                        <div>
+                            <strong>{{ post["username"] }}</strong>
+                            <small>@{{ post["username"] }}</small>
+                        </div>
+
+                    </div>
+
+                    {% if post["username"] == session.get("username") %}
+
+                    <form
+                        action="{{ url_for('delete_post', post_id=post['id']) }}"
+                        method="POST"
+                    >
+                        <button
+                            type="submit"
+                            class="post-delete"
+                            title="Delete post"
+                        >
+                            ⋯
+                        </button>
+                    </form>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="post-content">
+                    {{ post["content"] }}
+                </div>
+
+
+                <div class="post-footer">
+
+                    <button
+                        type="button"
+                        onclick="likePost({{ post['id'] }}, this)"
+                    >
+                        ♡ Like
+                        <span class="like-count">
+                            {{ post["likes"] }}
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="focusComment({{ post['id'] }})"
+                    >
+                        💬 Comment
+                    </button>
+
+                </div>
+
+
+                {% if comments_by_post.get(post["id"]) %}
+
+                <div class="comments-list" id="comments-{{ post['id'] }}">
+
+                    {% for comment in comments_by_post[post["id"]] %}
+
+                    <div class="comment-item">
+
+                        <div class="comment-avatar">
+                            {{ comment["username"][0]|upper }}
+                        </div>
+
+                        <div class="comment-body">
+
+                            <div class="comment-top">
+
+                                <strong>
+                                    {{ comment["username"] }}
+                                </strong>
+
+                                {% if comment["username"] == session.get("username") %}
+
+                                <form
+                                    action="{{ url_for('delete_comment', comment_id=comment['id']) }}"
+                                    method="POST"
+                                >
+                                    <button
+                                        type="submit"
+                                        class="comment-delete"
+                                        title="Delete comment"
+                                    >
+                                        ×
+                                    </button>
+                                </form>
+
+                                {% endif %}
+
+                            </div>
+
+                            <p>
+                                {{ comment["content"] }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
+
+
+                <form
+                    action="{{ url_for('add_comment', post_id=post['id']) }}"
+                    method="POST"
+                    class="comment-form"
+                    id="comment-form-{{ post['id'] }}"
+                >
+
+                    <div class="comment-input-avatar">
+                        {{ session.get("username", "U")[0]|upper }}
+                    </div>
+
+                    <input
+                        type="text"
+                        name="content"
+                        placeholder="Write a comment..."
+                        required
+                    >
+
+                    <button type="submit">
+                        ↑
+                    </button>
+
+                </form>
+
+            </article>
+
+            {% endfor %}
+
+        {% else %}
+
+        <section class="empty-state">
+
+            <div class="empty-icon">
+                ✨
+            </div>
+
+            <h2>No posts yet</h2>
+
+            <p>
+                Be the first person to create a post!
+            </p>
+
+        </section>
+
+        {% endif %}
+
+        {% else %}
+
+        <section class="empty-state">
+
+            <div class="empty-icon">
+                👋
+            </div>
+
+            <h2>Welcome to Socially</h2>
+
+            <p>
+                Login or create an account to start sharing.
+            </p>
+
+            <div class="auth-actions">
+
+                <a href="{{ url_for('login') }}" class="publish-btn">
+                    Login
+                </a>
+
+                <a href="{{ url_for('register') }}" class="secondary-btn">
+                    Create Account
+                </a>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+    </main>
+
+
+    <!-- RIGHT SIDEBAR -->
+    <aside class="right-sidebar">
+
+        {% if session.get("user_id") %}
+
+        <section class="widget">
+
+            <div class="widget-header">
+                <h3>Your Network</h3>
+            </div>
+
+            <div class="network-stats">
+
+                <div class="network-stat">
+                    <strong>{{ follower_count }}</strong>
+                    <span>Followers</span>
+                </div>
+
+                <div class="network-stat">
+                    <strong>{{ following_count }}</strong>
+                    <span>Following</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="widget" id="suggestions">
+
+            <div class="widget-header">
+                <h3>Suggested Users</h3>
+            </div>
+
+            {% if suggested_users %}
+
+                {% for user in suggested_users %}
+
+                <div class="suggestion">
+
+                    <div class="avatar suggestion-avatar">
+                        {{ user["username"][0]|upper }}
+                    </div>
+
+                    <div class="suggestion-info">
+
+                        <strong>
+                            {{ user["username"] }}
+                        </strong>
+
+                        <small>
+                            <span class="suggestion-count-{{ user['id'] }}">
+                                {{ user["follower_count"] }}
+                            </span>
+                            followers
+                        </small>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="follow-btn"
+                        data-user-id="{{ user['id'] }}"
+                        onclick="toggleFollow(this)"
+                    >
+                        Follow
+                    </button>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="widget-empty">
+                    No suggestions available.
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <section class="widget">
+
+            <div class="widget-header">
+                <h3>Trending</h3>
+            </div>
+
+            <div class="trending-item">
+                <small>Trending</small>
+                <strong>#Socially</strong>
+                <small>Join the conversation</small>
+            </div>
+
+            <div class="trending-item">
+                <small>Community</small>
+                <strong>#Connect</strong>
+                <small>Meet new people</small>
+            </div>
+
+            <div class="trending-item">
+                <small>Today</small>
+                <strong>#ShareYourThoughts</strong>
+                <small>Be yourself</small>
+            </div>
+
+        </section>
+
+        {% endif %}
+
+    </aside>
+
+</div>
+
+
+<script>
+
+function likePost(postId, button) {
+
+    fetch("/like/" + postId, {
+        method: "POST"
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+
+            const count = button.querySelector(".like-count");
+
+            if (count) {
+                count.textContent = data.likes;
+            }
+
+        } else {
+
+            alert(data.message || "Unable to like post.");
+
+        }
+
+    })
+    .catch(() => {
+        alert("Something went wrong.");
+    });
+}
+
+
+function focusComment(postId) {
+
+    const form = document.getElementById(
+        "comment-form-" + postId
+    );
+
+    if (!form) {
+        return;
+    }
+
+    const input = form.querySelector("input");
+
+    if (input) {
+
+        input.focus();
+
+        input.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+    }
+}
+
+
+function toggleFollow(button) {
+
+    const userId = button.dataset.userId;
+
+    const isFollowing =
+        button.classList.contains("following");
+
+    const endpoint = isFollowing
+        ? "/unfollow/" + userId
+        : "/follow/" + userId;
+
+    fetch(endpoint, {
+        method: "POST"
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (!data.success) {
+
+            alert(data.message || "Unable to update follow status.");
+            return;
+
+        }
+
+        const count =
+            document.querySelector(
+                ".suggestion-count-" + userId
+            );
+
+        if (count) {
+            count.textContent = data.follower_count;
+        }
+
+        if (data.following) {
+
+            button.textContent = "Following";
+            button.classList.add("following");
+
+        } else {
+
+            button.textContent = "Follow";
+            button.classList.remove("following");
+
+        }
+
+    })
+    .catch(() => {
+        alert("Something went wrong.");
+    });
+}
+
+</script>
+
+</body>
+</html>
